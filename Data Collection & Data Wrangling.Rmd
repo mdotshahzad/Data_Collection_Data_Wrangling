@@ -1,7 +1,7 @@
 ---
 title: "Data Collection and Data Wrangling"
-author: "Sana Rasheed"
-date: "July 19, 2020"
+author: "Muhammad Shahzad"
+date: "December 03, 2021"
 output: html_document
 ---
 
@@ -23,6 +23,8 @@ output: html_document
 library(help='datasets')
 ```
 
+vardata <- datasets::USPersonalExpenditure 
+vardata
 
 ```{r }
 USPersonalExpenditure
@@ -33,14 +35,21 @@ USPersonalExpenditure
 ```
 
 
+
+```{r }
+
+```
+
+
+summarise_at(vardata, vars("1940","1945","1950","1955","1960"), funs(mean, sd), na.rm = T)
+
 ```{r }
 
 ```
 
 
-```{r }
+mutate(vardata, mean_col = summarise_at(vardata, vars("1940","1945","1950","1955","1960"), funs(mean), na.rm = T))
 
-```
 
 
 ```{r }
@@ -71,26 +80,42 @@ filename <- "msleep_ggplot2.csv"
 ```
 
 
-```{r }
-
-```
-
+sleepdata <- read.csv(url)
+sleepdata
 
 ```{r }
 
 ```
 
 
+mutate(sleepdata, average_bodywt = bodywt*2,na.rm=T) %>%
+  select(genus,order,average_bodywt) %>% head()
+  
+
 ```{r }
 
 ```
 
 
+q2 <- data.frame(sleepdata %>% group_by(genus,order) %>% 
+                   mutate(rem_sleep = mean(sleep_rem, na.rm = T))
+                          %>% select(order,genus,sleep_rem,rem_sleep))
+q2
+
+
 ```{r }
 
 ```
 
 
+colSums(is.na(sleepdata))
+
+
+```{r }
+
+```
+
+By using mean of colums imputation can be performed and it would be better in my openion.
 ```{r }
 ### end solution ###
 ```
@@ -110,10 +135,30 @@ filename <- "msleep_ggplot2.csv"
 ```
 
 
+
+
+Results <- sleepdata %>% select(name, order, sleep_total, sleep_rem) %>% filter(order %in% c('Carnivora', 'Primates')) %>% group_by(order) %>% mutate(Avg_REM_Sleep= mean(sleep_rem, na.rm = TRUE),  
+           Total_Avg_Sleep= mean(sleep_total, na.rm = TRUE))
+Results
+
 ```{r }
 
 ```
 
+
+
+
+
+spread(sleepdata,order,name)
+spread(sleepdata,order,genus)
+spread(sleepdata,order,vore)
+spread(sleepdata,order,conservation)
+spread(sleepdata,order,sleep_total)
+spread(sleepdata,order,sleep_rem)
+spread(sleepdata,order,sleep_cycle)
+spread(sleepdata,order,awake)
+spread(sleepdata,order,brainwt)
+spread(sleepdata,order,bodywt)
 
 ```{r }
 
